@@ -8,7 +8,7 @@ const emptyEmployee: Employee = { id:'', employeeCode:'', name:'', jobTitle:'', 
 
 export function EmployeesPage() {
   const [items,setItems]=useState<Employee[]>([]); const [query,setQuery]=useState(''); const [editing,setEditing]=useState<Employee|null>(null); const [pinEmp,setPinEmp]=useState<Employee|null>(null); const [error,setError]=useState<string|null>(null);
-  const load=()=>api<Employee[]>('listEmployees').then(setItems).catch(e=>setError(e.message)); useEffect(load,[]);
+  const load=()=>api<Employee[]>('listEmployees').then(setItems).catch(e=>setError(e.message)); useEffect(() => { void load(); }, []);
   const filtered=useMemo(()=>items.filter(e=>!query||`${e.name} ${e.employeeCode} ${e.teacherCode||''} ${e.department}`.toLowerCase().includes(query.toLowerCase())),[items,query]);
   const save=async(emp:Employee)=>{try{await api('saveEmployee',{employee:emp});setEditing(null);load()}catch(e){setError(e instanceof Error?e.message:'تعذر الحفظ')}};
   return <>

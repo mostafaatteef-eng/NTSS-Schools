@@ -15,7 +15,7 @@ export function StudentsPage() {
   const [accessStudent, setAccessStudent] = useState<Student | null>(null);
   const [error, setError] = useState<string | null>(null);
   const load = () => api<Student[]>('listStudents').then(setStudents).catch(e=>setError(e.message));
-  useEffect(load, []);
+  useEffect(() => { void load(); }, []);
   const filtered = useMemo(() => students.filter(s => !query || `${s.name} ${s.studentCode} ${s.classroomName}`.toLowerCase().includes(query.toLowerCase())), [students, query]);
   const save = async (student: Student) => {
     try { await api('saveStudent', { student }); setEditing(null); load(); } catch(e) { setError(e instanceof Error ? e.message : 'تعذر الحفظ'); }
